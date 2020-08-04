@@ -1,13 +1,13 @@
 import React from "react";
-import { Button, Row, Col, Image, Container } from "react-bootstrap";
+import { Row, Col, Container } from "react-bootstrap";
 
-const BurgerBuilder = () => {
+const Orders = () => {
 	return (
 		<Container fluid>
 			<Row>
 				<Col></Col>
 				<Col md={10} sm={10} className="justify-content-center">
-					<h1>Burger Builder</h1>
+					<h1>Orders</h1>
 					<p>
 						Tungg many pats thicc, corgo. Shoob extremely cuuuuuute big ol doing
 						me a frighten long woofer porgo shooberino super chub yapper,
@@ -17,11 +17,8 @@ const BurgerBuilder = () => {
 				</Col>
 				<Col></Col>
 			</Row>
-			<Row className="justify-content-center">
-				<Button size="lg">Order Now</Button>
-			</Row>
 		</Container>
 	);
 };
 
-export default BurgerBuilder;
+export default Orders;
