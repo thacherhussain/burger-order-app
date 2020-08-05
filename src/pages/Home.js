@@ -9,6 +9,7 @@ const BurgerBuilder = () => {
 				className="justify-content-center"
 			>
 				<Image fluid src={require("../assets/images/burger.jpg")} />
+			<p style={{fontSize: 12}}>Photo by <a href="https://unsplash.com/@amir_v_ali?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">amirali mirhashemian</a> on <a href="https://unsplash.com/s/photos/burger?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></p>
 			</Row>
 			<Row>
 				<Col></Col>
