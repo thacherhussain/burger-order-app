@@ -24,7 +24,7 @@ const BurgerBuilder = () => {
 				<Col></Col>
 			</Row>
 			<Row className="justify-content-center">
-				<Button size="lg">Order Now</Button>
+				<Button size="lg" href="/burger-builder">Order Now</Button>
 			</Row>
 		</Container>
 	);
