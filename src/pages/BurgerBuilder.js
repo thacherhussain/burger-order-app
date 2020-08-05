@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Row, Col, Image, Container } from "react-bootstrap";
+import { Button, Row, Col, Container } from "react-bootstrap";
 
 const BurgerBuilder = () => {
 	return (
