@@ -1,10 +1,21 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { Link, useLocation } from 'react-router-dom';
 import { Container, Navbar, Nav } from "react-bootstrap";
 
+const NavLink = ({ to, children, onClick }) => (
+	<Nav.Link onClick={onClick} as={Link} to={to}>{children}</Nav.Link>
+)
 const Layout = (props) => {
+	const location = useLocation();
+	const [expanded, setExpanded] = useState(false);
+
+	useEffect(() => {
+		setExpanded(false);
+	}, [location.key]);
+
 	return (
 		<span>
-			<Navbar bg="light" expand="sm">
+			<Navbar expanded={expanded} bg="light" expand="sm">
 				<Navbar.Brand href="/">
                     <img
                         alt=""
@@ -14,12 +25,12 @@ const Layout = (props) => {
                     />{' '}
                     Good Burger
                 </Navbar.Brand>
-				<Navbar.Toggle />
+				<Navbar.Toggle onClick={() => setExpanded(!expanded)} />
 				<Navbar.Collapse>
 					<Nav>
-						<Nav.Link href="/">Home</Nav.Link>
-						<Nav.Link href="/burger-builder">Burger Builder</Nav.Link>
-						<Nav.Link href="/orders">Orders</Nav.Link>
+						<NavLink to="/">Home</NavLink>
+						<NavLink to="/burger-builder">Burger Builder</NavLink>
+						<NavLink to="/orders">Orders</NavLink>
 					</Nav>
 				</Navbar.Collapse>
 			</Navbar>

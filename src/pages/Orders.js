@@ -3,6 +3,7 @@ import { Row, Col, Container } from "react-bootstrap";
 
 import axios from "../axios-orders";
 import Order from "../components/Order";
+import { Helmet } from "react-helmet";
 
 const Orders = () => {
 	const [orders, setOrders] = useState([]);
@@ -17,6 +18,10 @@ const Orders = () => {
 	console.log(orders);
 
 	return (
+		<>
+		<Helmet>
+			<title>Orders | Good Burger</title>
+		</Helmet>
 		<Container fluid>
 			<Row>
 				<Col></Col>
@@ -24,7 +29,7 @@ const Orders = () => {
 					<h1>Orders</h1>
 					{orders.map((order) => (
 						<Order
-							key={order.orderId}
+							key={order.customer.email}
 							name={order.customer.name}
 							email={order.customer.email}
 							ingredients={order.ingredients}
@@ -36,6 +41,7 @@ const Orders = () => {
 				<Col></Col>
 			</Row>
 		</Container>
+		</>
 	);
 };
 

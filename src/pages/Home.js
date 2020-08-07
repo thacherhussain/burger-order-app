@@ -1,8 +1,14 @@
 import React from "react";
 import { Button, Row, Col, Image, Container } from "react-bootstrap";
+import { Link } from 'react-router-dom';
+import { Helmet } from "react-helmet";
 
 const BurgerBuilder = () => {
 	return (
+		<>
+		<Helmet>
+			<title>Home | Good Burger</title>
+		</Helmet>
 		<Container fluid>
 			<Row
 				style={{ margin: "25px auto", overflowX: "hidden" }}
@@ -25,9 +31,10 @@ const BurgerBuilder = () => {
 				<Col></Col>
 			</Row>
 			<Row className="justify-content-center">
-				<Button size="lg" href="/burger-builder">Order Now</Button>
+				<Button size="lg" as={Link} to="/burger-builder">Order Now</Button>
 			</Row>
 		</Container>
+		</>
 	);
 };
 

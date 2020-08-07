@@ -6,15 +6,25 @@ import Layout from "./hoc/Layout";
 import BurgerBuilder from "./pages/BurgerBuilder";
 import Home from "./pages/Home";
 import Orders from "./pages/Orders";
+import Checkout from "./pages/Checkout";
 
 const App = () => {
 	return (
 		<BrowserRouter>
 			<Layout>
 				<Switch>
-					<Route path="/" exact component={Home} />
-					<Route path="/burger-builder" exact component={BurgerBuilder} />
-					<Route path="/orders" exact component={Orders} />
+					<Route path="/" exact>
+						<Home />
+					</Route>
+					<Route path="/burger-builder" exact>
+						<BurgerBuilder />
+					</Route>
+					<Route path="/orders" exact>
+						<Orders />
+					</Route>
+					<Route path="/checkout" exact>
+						<Checkout />
+					</Route>
 				</Switch>
 			</Layout>
 		</BrowserRouter>
