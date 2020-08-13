@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, Row, Col, Container } from "react-bootstrap";
+import { Container, Row, Col, Button, Modal } from "react-bootstrap";
 import { Helmet } from "react-helmet";
 import { useHistory, Link } from "react-router-dom";
 
@@ -10,6 +10,7 @@ const ingredients = ["beef", "bacon", "lettuce", "tomato", "ketchup"];
 const BurgerBuilder = () => {
 	const [values, setValues] = useState({});
 	const history = useHistory(); // TODO: use this
+	const [purchasing, setPurchasing] = useState(false);
 
 	const handleSubmit = () => {
 		// TODO: make this open confirmation showing current ingredients
@@ -26,6 +27,11 @@ const BurgerBuilder = () => {
 			setValues(initialValues);
 		}, 1500);
 	}, []);
+	console.log(values);
+
+	const purchasingHandler = () => {
+		setPurchasing(!purchasing);
+	};
 
 	return (
 		<>
@@ -38,8 +44,8 @@ const BurgerBuilder = () => {
 						<h1>Burger Builder</h1>
 					</Col>
 				</Row>
-				<Row>
-					<ul>
+				<Row className="justify-content-center">
+					<span>
 						{ingredients.map((ingredient) => (
 							<IngredientButton
 								onClick={(newValue) => {
@@ -49,13 +55,41 @@ const BurgerBuilder = () => {
 								ingredient={ingredient}
 							/>
 						))}
-					</ul>
+					</span>
 				</Row>
-				<Row className="justify-content-center" style={{paddingBottom: '10px'}}>
-					<Button onClick={handleSubmit} size="lg">Submit</Button>
+				<Row>
+					{purchasing && (
+						<Modal.Dialog>
+							<Modal.Header closeButton>
+								<Modal.Title>Modal title</Modal.Title>
+							</Modal.Header>
+
+							<Modal.Body>
+								<ul>
+									{ingredients.map((ingredient) => (
+										<li>
+											<span>{ingredient}</span>
+											<span>({values[ingredient]})</span>
+										</li>
+									))}
+								</ul>
+							</Modal.Body>
+
+							<Modal.Footer>
+								<Button variant="secondary" onClick={purchasingHandler}>
+									Cancel
+								</Button>
+								<Button variant="primary" as={Link} to="/checkout">
+									Checkout
+								</Button>
+							</Modal.Footer>
+						</Modal.Dialog>
+					)}
 				</Row>
 				<Row className="justify-content-center">
-					<Button size="lg" as={Link} to="/checkout">Checkout</Button>
+					<Button onClick={purchasingHandler} size="lg">
+						Submit
+					</Button>
 				</Row>
 			</Container>
 		</>
