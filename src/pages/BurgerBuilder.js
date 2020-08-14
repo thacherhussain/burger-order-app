@@ -1,18 +1,23 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Button, Modal } from "react-bootstrap";
+import { Container, Row, Col, Button } from "react-bootstrap";
 import { Helmet } from "react-helmet";
-import { useHistory, Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 import IngredientButton from "components/Burger/BuildControls/IngredientButton";
-
+import OrderConfirmationModal from "components/UI/OrderConfirmationModal";
 const ingredients = ["beef", "bacon", "lettuce", "tomato", "ketchup"];
 
 const BurgerBuilder = () => {
 	const [values, setValues] = useState({});
 	const history = useHistory(); // TODO: use this
-	const [purchasing, setPurchasing] = useState(false);
+
+	const [show, setShow] = useState(false);
+
+	const handleClose = () => setShow(false);
+	// const handleShow = () => setShow(true);
 
 	const handleSubmit = () => {
+		setShow(true);
 		// TODO: make this open confirmation showing current ingredients
 		console.log(values);
 	};
@@ -27,11 +32,6 @@ const BurgerBuilder = () => {
 			setValues(initialValues);
 		}, 1500);
 	}, []);
-	console.log(values);
-
-	const purchasingHandler = () => {
-		setPurchasing(!purchasing);
-	};
 
 	return (
 		<>
@@ -58,36 +58,15 @@ const BurgerBuilder = () => {
 					</span>
 				</Row>
 				<Row>
-					{purchasing && (
-						<Modal.Dialog>
-							<Modal.Header closeButton>
-								<Modal.Title>Modal title</Modal.Title>
-							</Modal.Header>
-
-							<Modal.Body>
-								<ul>
-									{ingredients.map((ingredient) => (
-										<li>
-											<span>{ingredient}</span>
-											<span>({values[ingredient]})</span>
-										</li>
-									))}
-								</ul>
-							</Modal.Body>
-
-							<Modal.Footer>
-								<Button variant="secondary" onClick={purchasingHandler}>
-									Cancel
-								</Button>
-								<Button variant="primary" as={Link} to="/checkout">
-									Checkout
-								</Button>
-							</Modal.Footer>
-						</Modal.Dialog>
-					)}
+					<OrderConfirmationModal
+						show={show}
+						onClose={handleClose}
+						ingredients={ingredients}
+						values={values}
+					/>
 				</Row>
 				<Row className="justify-content-center">
-					<Button onClick={purchasingHandler} size="lg">
+					<Button onClick={handleSubmit} size="lg">
 						Submit
 					</Button>
 				</Row>
