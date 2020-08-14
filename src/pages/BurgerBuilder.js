@@ -12,14 +12,15 @@ const BurgerBuilder = () => {
 	const history = useHistory(); // TODO: use this
 
 	const [show, setShow] = useState(false);
+	const [hasIngredients, setHasIngredients] = useState(false);
 
 	const handleClose = () => setShow(false);
-	// const handleShow = () => setShow(true);
 
 	const handleSubmit = () => {
 		setShow(true);
 		// TODO: make this open confirmation showing current ingredients
 		console.log(values);
+		console.log(Object.values(values).reduce((sum, el) => sum + el, 0));
 	};
 
 	useEffect(() => {
@@ -32,6 +33,14 @@ const BurgerBuilder = () => {
 			setValues(initialValues);
 		}, 1500);
 	}, []);
+
+	useEffect(() => {
+		if (Object.values(values).reduce((sum, el) => sum + el, 0) > 0) {
+			setHasIngredients(true);
+		} else {
+			setHasIngredients(false);
+		}
+	}, [values]);
 
 	return (
 		<>
@@ -66,7 +75,7 @@ const BurgerBuilder = () => {
 					/>
 				</Row>
 				<Row className="justify-content-center">
-					<Button onClick={handleSubmit} size="lg">
+					<Button size="lg" onClick={handleSubmit} disabled={!hasIngredients}>
 						Submit
 					</Button>
 				</Row>

@@ -12,8 +12,6 @@ const OrderConfirmationModal = (props) => {
 					<Modal.Title>Order Details</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
-					{" "}
-					Text Here
 					<ul>
 						{ingredients.map((ingredient) => (
 							<li>
