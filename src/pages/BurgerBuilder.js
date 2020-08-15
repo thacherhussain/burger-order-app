@@ -5,7 +5,9 @@ import { useHistory } from "react-router-dom";
 
 import IngredientButton from "components/Burger/IngredientButton";
 import OrderConfirmationModal from "components/UI/OrderConfirmationModal";
-const ingredients = ["beef", "bacon", "lettuce", "tomato", "ketchup"];
+import Burger from 'components/Burger/Burger';
+
+const ingredients = [ "salad", "bacon", "cheese", "meat"];
 
 const BurgerBuilder = () => {
 	const [values, setValues] = useState({});
@@ -51,6 +53,11 @@ const BurgerBuilder = () => {
 				<Row center>
 					<Col md={10} sm={10} className="justify-content-center">
 						<h1>Burger Builder</h1>
+					</Col>
+				</Row>
+				<Row>
+					<Col md={10} sm={10} className="justify-content-center">
+						<Burger ingredients={values}/>
 					</Col>
 				</Row>
 				<Row className="justify-content-center">
