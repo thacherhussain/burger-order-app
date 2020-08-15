@@ -17,7 +17,7 @@ const IngredientButton = ({ ingredient, value = 0, onClick }) => {
 		<div className="d-flex justify-content-center py-2">
 			<ButtonGroup>
 				<Button onClick={() => onClick(value - 1)} disabled={!hasIngredient}>-</Button>
-				<Button disabled>
+				<Button variant="outline-primary" style={{minWidth: '120px'}} disabled>
 					{ingredient} ({value})
 				</Button>
 				<Button onClick={() => onClick(value + 1)}>+</Button>

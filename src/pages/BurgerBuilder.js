@@ -3,7 +3,7 @@ import { Container, Row, Col, Button } from "react-bootstrap";
 import { Helmet } from "react-helmet";
 import { useHistory } from "react-router-dom";
 
-import IngredientButton from "components/Burger/BuildControls/IngredientButton";
+import IngredientButton from "components/Burger/IngredientButton";
 import OrderConfirmationModal from "components/UI/OrderConfirmationModal";
 const ingredients = ["beef", "bacon", "lettuce", "tomato", "ketchup"];
 
