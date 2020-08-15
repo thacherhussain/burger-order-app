@@ -3,9 +3,9 @@ import { Container, Row, Col, Button } from "react-bootstrap";
 import { Helmet } from "react-helmet";
 import { useHistory } from "react-router-dom";
 
+import Burger from 'components/Burger/Burger';
 import IngredientButton from "components/Burger/IngredientButton";
 import OrderConfirmationModal from "components/UI/OrderConfirmationModal";
-import Burger from 'components/Burger/Burger';
 
 const ingredients = [ "salad", "bacon", "cheese", "meat"];
 
@@ -20,9 +20,6 @@ const BurgerBuilder = () => {
 
 	const handleSubmit = () => {
 		setShow(true);
-		// TODO: make this open confirmation showing current ingredients
-		console.log(values);
-		console.log(Object.values(values).reduce((sum, el) => sum + el, 0));
 	};
 
 	useEffect(() => {
@@ -50,15 +47,13 @@ const BurgerBuilder = () => {
 				<title>Build a Burger | Good Burger</title>
 			</Helmet>
 			<Container fluid>
-				<Row center>
+				<Row>
 					<Col md={10} sm={10} className="justify-content-center">
 						<h1>Burger Builder</h1>
 					</Col>
 				</Row>
-				<Row>
-					<Col md={10} sm={10} className="justify-content-center">
+				<Row className="justify-content-center">
 						<Burger ingredients={values}/>
-					</Col>
 				</Row>
 				<Row className="justify-content-center">
 					<span>
@@ -81,7 +76,7 @@ const BurgerBuilder = () => {
 						values={values}
 					/>
 				</Row>
-				<Row className="justify-content-center">
+				<Row className="justify-content-center my-3">
 					<Button size="lg" onClick={handleSubmit} disabled={!hasIngredients}>
 						Submit
 					</Button>
