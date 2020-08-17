@@ -1,45 +1,164 @@
-import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Button } from "react-bootstrap";
+import React, { useState, useEffect, useReducer } from "react";
+import { Container, Row, Col } from "react-bootstrap";
 import { Helmet } from "react-helmet";
 import { useHistory } from "react-router-dom";
 
-import Burger from 'components/Burger/Burger';
-import IngredientButton from "components/Burger/IngredientButton";
-import OrderConfirmationModal from "components/UI/OrderConfirmationModal";
+import Burger from "components/Burger/Burger";
+import axios from "../axios-orders";
+import ControlPanel from "components/Burger/ControlPanel";
 
-const ingredients = [ "salad", "bacon", "cheese", "meat"];
+const initialState = {
+	ingredients: {},
+	purchasing: false,
+	loading: false,
+	error: false,
+	basePrice: 0,
+	prices: {},
+};
 
-const BurgerBuilder = () => {
-	const [values, setValues] = useState({});
+const reducer = (state, action) => {
+	// TODO: LOOK INTO IMMER
+	switch (action.type) {
+		case "MODIFY_INGREDIENTS":
+			return { ...state, ingredients: action.payload };
+		case "TOGGLE_PURCHASE":
+			return {
+				...state,
+				purchasing:
+					action.payload !== undefined ? action.payload : !state.purchasing,
+			};
+		case "INIT":
+			return {
+				...state,
+				basePrice: action.payload.basePrice,
+				ingredients: action.payload.ingredients,
+				prices: action.payload.prices,
+			};
+		case "ERROR":
+			return { ...state, error: true };
+		default:
+			throw new Error("unhandled action type");
+	}
+};
+
+const BurgerBuilder = (props) => {
 	const history = useHistory(); // TODO: use this
 
 	const [show, setShow] = useState(false);
-	const [hasIngredients, setHasIngredients] = useState(false);
 
-	const handleClose = () => setShow(false);
-
-	const handleSubmit = () => {
-		setShow(true);
-	};
+	const [state, dispatch] = useReducer(reducer, initialState);
 
 	useEffect(() => {
-		// TODO: Implement axios and grab data from firebase
-		setTimeout(() => {
-			const initialValues = ingredients.reduce((acc, item) => {
-				acc[item] = 0;
-				return acc;
-			}, {});
-			setValues(initialValues);
-		}, 1500);
+		const getData = async () => {
+			try {
+				const [priceResponse, ingredientsResponse] = await Promise.all([
+					axios.get(
+						"https://burger-generator-cdbeb.firebaseio.com/%22basePrice%22.json"
+					),
+					axios.get(
+						"https://burger-generator-cdbeb.firebaseio.com/%22bigIngredients%22.json"
+					),
+				]);
+
+				const prices = ingredientsResponse.data.reduce((acc, ingredient) => {
+					acc[ingredient.name] = ingredient.cost;
+					return acc;
+				}, {});
+				console.log(prices);
+				const ingredients = ingredientsResponse.data.reduce(
+					(acc, ingredient) => {
+						acc[ingredient.name] = ingredient.defaultValue;
+						return acc;
+					},
+					{}
+				);
+				console.log(ingredients);
+				const properIngredients =
+					// (props.location.state && props.location.state.ingredients) ||
+					ingredients;
+
+				dispatch({
+					type: "INIT",
+					payload: {
+						basePrice: priceResponse.data,
+						ingredients: properIngredients,
+						prices: prices,
+					},
+				});
+			} catch (error) {
+				dispatch({ type: "ERROR" });
+			}
+		};
+
+		getData();
 	}, []);
 
-	useEffect(() => {
-		if (Object.values(values).reduce((sum, el) => sum + el, 0) > 0) {
-			setHasIngredients(true);
-		} else {
-			setHasIngredients(false);
+	const addIngredientHandler = (type) => {
+		const oldCount = state.ingredients[type];
+		const updatedCount = oldCount + 1;
+		const updatedIngredients = {
+			...state.ingredients,
+		};
+		updatedIngredients[type] = updatedCount;
+		dispatch({ type: "MODIFY_INGREDIENTS", payload: updatedIngredients });
+	};
+
+	const removeIngredientHandler = (type) => {
+		const oldCount = state.ingredients[type];
+		if (oldCount <= 0) {
+			return;
 		}
-	}, [values]);
+		const updatedCount = oldCount - 1;
+		const updatedIngredients = {
+			...state.ingredients,
+		};
+		updatedIngredients[type] = updatedCount;
+		dispatch({ type: "MODIFY_INGREDIENTS", payload: updatedIngredients });
+	};
+
+	const purchaseHandler = () => {
+		setShow(true);
+		dispatch({ type: "TOGGLE_PURCHASE", payload: true });
+
+	};
+
+	const purchaseCancelHandler = () => {
+		setShow(false);
+		dispatch({ type: "TOGGLE_PURCHASE", payload: false });
+	};
+
+	const purchaseContinueHandler = (totalPrice) => {
+		const queryParams = [];
+
+		for (let i in state.ingredients) {
+			queryParams.push(
+				encodeURIComponent(i) + "=" + encodeURIComponent(state.ingredients[i])
+			);
+		}
+		queryParams.push("price=" + totalPrice);
+		const queryString = queryParams.join("&");
+
+		props.history.push({
+			pathname: "/checkout",
+			search: "?" + queryString,
+			state: {
+				ingredients: state.ingredients,
+			},
+		});
+	};
+
+	const purchasable = Object.values(state.ingredients).reduce(
+		(sum, el) => sum + el,
+		0
+	);
+
+	const totalPrice =
+		state.basePrice +
+		Object.entries(state.ingredients)
+			.map(([key, value]) => {
+				return state.prices[key] * +value;
+			})
+			.reduce((sum, el) => sum + el, 0);
 
 	return (
 		<>
@@ -53,34 +172,35 @@ const BurgerBuilder = () => {
 					</Col>
 				</Row>
 				<Row className="justify-content-center">
-						<Burger ingredients={values}/>
+					<Burger ingredients={state.ingredients} />
 				</Row>
 				<Row className="justify-content-center">
-					<span>
-						{ingredients.map((ingredient) => (
-							<IngredientButton
-								onClick={(newValue) => {
-									setValues({ ...values, [ingredient]: newValue });
-								}}
-								value={values[ingredient]}
-								ingredient={ingredient}
-							/>
-						))}
-					</span>
+					{state.error ? (
+						<p>Ingredients can't be loaded</p>
+					) : (
+						<ControlPanel
+							ingredientAdded={addIngredientHandler}
+							ingredientRemoved={removeIngredientHandler}
+							ingredients={state.ingredients}
+							disabled={purchasable}
+							purchasable={purchasable}
+							ordered={purchaseHandler}
+							// ordered={purchaseContinueHandler}
+							price={totalPrice}
+							show={show}
+							onClose={purchaseCancelHandler}
+
+						/>
+					)}
 				</Row>
-				<Row>
-					<OrderConfirmationModal
-						show={show}
-						onClose={handleClose}
-						ingredients={ingredients}
-						values={values}
-					/>
-				</Row>
-				<Row className="justify-content-center my-3">
-					<Button size="lg" onClick={handleSubmit} disabled={!hasIngredients}>
-						Submit
-					</Button>
-				</Row>
+
+				{/* TODO: populate order data to checkout page -- use Context*/}
+				{/* TODO: get form submission with order information to push to firebase */}
+				{/* TODO: Setup SCHEDULE MY ORDER modal (Mockup of Tidepool component) */}
+				{/* TODO: add uuid as order number and customer number (for when auth is added) */}
+				{/* TODO: Setup more testing */}
+				{/* TODO: Setup Auth -- customer user sign up/sign in */}
+				{/* TODO: How to use images for individual burger pieces so that different ingredients can be more easily added/removed */}
 			</Container>
 		</>
 	);

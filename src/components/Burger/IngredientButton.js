@@ -1,26 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+
 import { ButtonGroup, Button } from "react-bootstrap";
 
-const IngredientButton = ({ ingredient, value = 0, onClick }) => {
-
-	const [hasIngredient, setHasIngredient] = useState(false);
-	
-	useEffect(() => {
-		if ( value === 0) {
-			setHasIngredient(false);
-		} else {
-			setHasIngredient(true);
-		}
-	}, [value]);
-
+const IngredientButton = (props) => {
 	return (
 		<div className="d-flex justify-content-center py-2">
 			<ButtonGroup>
-				<Button onClick={() => onClick(value - 1)} disabled={!hasIngredient}>-</Button>
-				<Button variant="outline-primary" style={{minWidth: '120px'}} disabled>
-					{ingredient} ({value})
+				<Button onClick={props.removed} disabled={props.disabled}>
+					-
 				</Button>
-				<Button onClick={() => onClick(value + 1)}>+</Button>
+				<Button
+					variant="outline-primary"
+					style={{ minWidth: "120px" }}
+					disabled
+				>
+					{props.label} ({props.value})
+				</Button>
+				<Button onClick={props.added}>+</Button>
 			</ButtonGroup>
 		</div>
 	);
