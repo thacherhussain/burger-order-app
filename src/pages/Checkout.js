@@ -3,7 +3,11 @@ import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
 
+import { useOrderStore } from "context/orderContext";
+
 const Checkout = () => {
+	const { ingredients } = useOrderStore();
+
 	return (
 		<>
 			<Helmet>
@@ -11,7 +15,15 @@ const Checkout = () => {
 			</Helmet>
 			<Container fluid>
 				<Row>
-					<Col></Col>
+					<ul>
+						{Object.entries(ingredients).map(([key, value]) => (
+							<li>
+								{key} - {value}
+							</li>
+						))}
+					</ul>
+				</Row>
+				<Row>
 					<Col md={10} sm={10} className="justify-content-center">
 						<h1>Checkout</h1>
 						<p>Order #</p>

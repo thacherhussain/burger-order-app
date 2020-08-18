@@ -3,50 +3,19 @@ import { Container, Row, Col } from "react-bootstrap";
 import { Helmet } from "react-helmet";
 import { useHistory } from "react-router-dom";
 
-import Burger from "components/Burger/Burger";
 import axios from "../axios-orders";
+import Burger from "components/Burger/Burger";
 import ControlPanel from "components/Burger/ControlPanel";
+import { useOrderStore, useOrderDispatch } from 'context/orderContext';
 
-const initialState = {
-	ingredients: {},
-	purchasing: false,
-	loading: false,
-	error: false,
-	basePrice: 0,
-	prices: {},
-};
-
-const reducer = (state, action) => {
-	// TODO: LOOK INTO IMMER
-	switch (action.type) {
-		case "MODIFY_INGREDIENTS":
-			return { ...state, ingredients: action.payload };
-		case "TOGGLE_PURCHASE":
-			return {
-				...state,
-				purchasing:
-					action.payload !== undefined ? action.payload : !state.purchasing,
-			};
-		case "INIT":
-			return {
-				...state,
-				basePrice: action.payload.basePrice,
-				ingredients: action.payload.ingredients,
-				prices: action.payload.prices,
-			};
-		case "ERROR":
-			return { ...state, error: true };
-		default:
-			throw new Error("unhandled action type");
-	}
-};
 
 const BurgerBuilder = (props) => {
+	const { ingredients, error, basePrice, prices } = useOrderStore();
+	const dispatch = useOrderDispatch();
+
 	const history = useHistory(); // TODO: use this
 
 	const [show, setShow] = useState(false);
-
-	const [state, dispatch] = useReducer(reducer, initialState);
 
 	useEffect(() => {
 		const getData = async () => {
@@ -94,23 +63,23 @@ const BurgerBuilder = (props) => {
 	}, []);
 
 	const addIngredientHandler = (type) => {
-		const oldCount = state.ingredients[type];
+		const oldCount = ingredients[type];
 		const updatedCount = oldCount + 1;
 		const updatedIngredients = {
-			...state.ingredients,
+			...ingredients,
 		};
 		updatedIngredients[type] = updatedCount;
 		dispatch({ type: "MODIFY_INGREDIENTS", payload: updatedIngredients });
 	};
 
 	const removeIngredientHandler = (type) => {
-		const oldCount = state.ingredients[type];
+		const oldCount = ingredients[type];
 		if (oldCount <= 0) {
 			return;
 		}
 		const updatedCount = oldCount - 1;
 		const updatedIngredients = {
-			...state.ingredients,
+			...ingredients,
 		};
 		updatedIngredients[type] = updatedCount;
 		dispatch({ type: "MODIFY_INGREDIENTS", payload: updatedIngredients });
@@ -130,9 +99,9 @@ const BurgerBuilder = (props) => {
 	const purchaseContinueHandler = (totalPrice) => {
 		const queryParams = [];
 
-		for (let i in state.ingredients) {
+		for (let i in ingredients) {
 			queryParams.push(
-				encodeURIComponent(i) + "=" + encodeURIComponent(state.ingredients[i])
+				encodeURIComponent(i) + "=" + encodeURIComponent(ingredients[i])
 			);
 		}
 		queryParams.push("price=" + totalPrice);
@@ -142,21 +111,21 @@ const BurgerBuilder = (props) => {
 			pathname: "/checkout",
 			search: "?" + queryString,
 			state: {
-				ingredients: state.ingredients,
+				ingredients: ingredients,
 			},
 		});
 	};
 
-	const purchasable = Object.values(state.ingredients).reduce(
+	const purchasable = Object.values(ingredients).reduce(
 		(sum, el) => sum + el,
 		0
 	);
 
 	const totalPrice =
-		state.basePrice +
-		Object.entries(state.ingredients)
+		basePrice +
+		Object.entries(ingredients)
 			.map(([key, value]) => {
-				return state.prices[key] * +value;
+				return prices[key] * +value;
 			})
 			.reduce((sum, el) => sum + el, 0);
 
@@ -172,16 +141,16 @@ const BurgerBuilder = (props) => {
 					</Col>
 				</Row>
 				<Row className="justify-content-center">
-					<Burger ingredients={state.ingredients} />
+					<Burger ingredients={ingredients} />
 				</Row>
 				<Row className="justify-content-center">
-					{state.error ? (
+					{error ? (
 						<p>Ingredients can't be loaded</p>
 					) : (
 						<ControlPanel
 							ingredientAdded={addIngredientHandler}
 							ingredientRemoved={removeIngredientHandler}
-							ingredients={state.ingredients}
+							ingredients={ingredients}
 							disabled={purchasable}
 							purchasable={purchasable}
 							ordered={purchaseHandler}
@@ -197,7 +166,7 @@ const BurgerBuilder = (props) => {
 				{/* TODO: populate order data to checkout page -- use Context*/}
 				{/* TODO: get form submission with order information to push to firebase */}
 				{/* TODO: Setup SCHEDULE MY ORDER modal (Mockup of Tidepool component) */}
-				{/* TODO: add uuid as order number and customer number (for when auth is added) */}
+				{/* TODO: add uuid library for order number and customer number (for when auth is added) */}
 				{/* TODO: Setup more testing */}
 				{/* TODO: Setup Auth -- customer user sign up/sign in */}
 				{/* TODO: How to use images for individual burger pieces so that different ingredients can be more easily added/removed */}

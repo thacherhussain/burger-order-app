@@ -19,28 +19,28 @@ const Orders = () => {
 
 	return (
 		<>
-		<Helmet>
-			<title>Orders | Good Burger</title>
-		</Helmet>
-		<Container fluid>
-			<Row>
-				<Col></Col>
-				<Col md={10} sm={10} className="justify-content-center">
-					<h1>Orders</h1>
-					{orders.map((order) => (
-						<Order
-							key={order.customer.email}
-							name={order.customer.name}
-							email={order.customer.email}
-							ingredients={order.ingredients}
-							deliveryMethod={order.deliveryMethod}
-							price={order.price}
-						/>
-					))}
-				</Col>
-				<Col></Col>
-			</Row>
-		</Container>
+			<Helmet>
+				<title>Orders | Good Burger</title>
+			</Helmet>
+			<Container fluid>
+				<Row>
+					<Col></Col>
+					<Col md={10} sm={10} className="justify-content-center">
+						<h1>Orders</h1>
+						{orders.map((order) => (
+							<Order
+								key={order.customer.email}
+								name={order.customer.name}
+								email={order.customer.email}
+								ingredients={order.ingredients}
+								deliveryMethod={order.deliveryMethod}
+								price={order.price}
+							/>
+						))}
+					</Col>
+					<Col></Col>
+				</Row>
+			</Container>
 		</>
 	);
 };
