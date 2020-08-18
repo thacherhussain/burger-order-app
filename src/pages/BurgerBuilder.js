@@ -1,20 +1,17 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { Helmet } from "react-helmet";
-import { useHistory } from "react-router-dom";
+// import { useHistory } from "react-router-dom";
 
 import axios from "../axios-orders";
 import Burger from "components/Burger/Burger";
 import ControlPanel from "components/Burger/ControlPanel";
-import { useOrderStore, useOrderDispatch } from 'context/orderContext';
+import { useOrderStore, useOrderDispatch } from "context/orderContext";
 
-
-const BurgerBuilder = (props) => {
+const BurgerBuilder = () => {
 	const { ingredients, error, basePrice, prices, totalPrice } = useOrderStore();
 	const dispatch = useOrderDispatch();
-
-	const history = useHistory(); // TODO: use this
-
+	// const history = useHistory(); // TODO: use this
 	const [show, setShow] = useState(false);
 
 	useEffect(() => {
@@ -33,7 +30,7 @@ const BurgerBuilder = (props) => {
 					acc[ingredient.name] = ingredient.cost;
 					return acc;
 				}, {});
-				console.log(prices);
+
 				const ingredients = ingredientsResponse.data.reduce(
 					(acc, ingredient) => {
 						acc[ingredient.name] = ingredient.defaultValue;
@@ -41,16 +38,12 @@ const BurgerBuilder = (props) => {
 					},
 					{}
 				);
-				console.log(ingredients);
-				const properIngredients =
-					// (props.location.state && props.location.state.ingredients) ||
-					ingredients;
 
 				dispatch({
 					type: "INIT",
 					payload: {
 						basePrice: priceResponse.data,
-						ingredients: properIngredients,
+						ingredients: ingredients,
 						prices: prices,
 					},
 				});
@@ -69,20 +62,21 @@ const BurgerBuilder = (props) => {
 			...ingredients,
 		};
 		updatedIngredients[type] = updatedCount;
-		
-		const updatedTotalPrice = basePrice +
-		Object.entries(updatedIngredients)
-		.map(([key, value]) => {
-			return prices[key] * +value;
-		})
-		.reduce((sum, el) => sum + el, 0);
 
-		dispatch({ 
+		const updatedTotalPrice =
+			basePrice +
+			Object.entries(updatedIngredients)
+				.map(([key, value]) => {
+					return prices[key] * +value;
+				})
+				.reduce((sum, el) => sum + el, 0);
+
+		dispatch({
 			type: "MODIFY_INGREDIENTS",
-			payload: { 
+			payload: {
 				ingredients: updatedIngredients,
 				totalPrice: updatedTotalPrice,
-			}
+			},
 		});
 	};
 
@@ -97,51 +91,31 @@ const BurgerBuilder = (props) => {
 		};
 		updatedIngredients[type] = updatedCount;
 
-		const updatedTotalPrice = basePrice +
-		Object.entries(updatedIngredients)
-		.map(([key, value]) => {
-			return prices[key] * +value;
-		})
-		.reduce((sum, el) => sum + el, 0);
+		const updatedTotalPrice =
+			basePrice +
+			Object.entries(updatedIngredients)
+				.map(([key, value]) => {
+					return prices[key] * +value;
+				})
+				.reduce((sum, el) => sum + el, 0);
 
-		dispatch({ 
+		dispatch({
 			type: "MODIFY_INGREDIENTS",
-			payload: { 
+			payload: {
 				ingredients: updatedIngredients,
 				totalPrice: updatedTotalPrice,
-			}
+			},
 		});
 	};
 
 	const purchaseHandler = () => {
 		setShow(true);
 		dispatch({ type: "TOGGLE_PURCHASE", payload: true });
-
 	};
 
 	const purchaseCancelHandler = () => {
 		setShow(false);
 		dispatch({ type: "TOGGLE_PURCHASE", payload: false });
-	};
-
-	const purchaseContinueHandler = (totalPrice) => {
-		const queryParams = [];
-
-		for (let i in ingredients) {
-			queryParams.push(
-				encodeURIComponent(i) + "=" + encodeURIComponent(ingredients[i])
-			);
-		}
-		queryParams.push("price=" + totalPrice);
-		const queryString = queryParams.join("&");
-
-		props.history.push({
-			pathname: "/checkout",
-			search: "?" + queryString,
-			state: {
-				ingredients: ingredients,
-			},
-		});
 	};
 
 	const purchasable = Object.values(ingredients).reduce(
@@ -174,11 +148,9 @@ const BurgerBuilder = (props) => {
 							disabled={purchasable}
 							purchasable={purchasable}
 							ordered={purchaseHandler}
-							// ordered={purchaseContinueHandler}
 							price={totalPrice}
 							show={show}
 							onClose={purchaseCancelHandler}
-
 						/>
 					)}
 				</Row>

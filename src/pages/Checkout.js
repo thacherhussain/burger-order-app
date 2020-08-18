@@ -9,9 +9,7 @@ import { v4 as uuidv4 } from "uuid";
 import axios from "axios-orders";
 import { useOrderStore } from "context/orderContext";
 
-{
-	/* TODO: Setup SCHEDULE MY ORDER modal (Mockup of Tidepool component) */
-}
+/* TODO: Setup SCHEDULE MY ORDER modal (Mockup of Tidepool component) */
 
 const Checkout = () => {
 	const { ingredients, totalPrice } = useOrderStore();
