@@ -6,7 +6,7 @@ import { Helmet } from "react-helmet";
 import { useOrderStore } from "context/orderContext";
 
 const Checkout = () => {
-	const { ingredients } = useOrderStore();
+	const { ingredients, totalPrice } = useOrderStore();
 
 	return (
 		<>
@@ -28,7 +28,7 @@ const Checkout = () => {
 						<h1>Checkout</h1>
 						<p>Order #</p>
 						<p>Order</p>
-						<p>Price</p>
+						<p>Price {totalPrice}</p>
 						<p>User Name</p>
 						<p>User Address</p>
 					</Col>

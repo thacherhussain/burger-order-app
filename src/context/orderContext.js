@@ -7,14 +7,18 @@ const initialState = {
 	error: false,
 	basePrice: 0,
     prices: {},
-    // totalPrice: 0,
+    totalPrice: 0,
 };
 
 const reducer = (state, action) => {
 	// TODO: LOOK INTO IMMER
 	switch (action.type) {
 		case "MODIFY_INGREDIENTS":
-			return { ...state, ingredients: action.payload };
+			return { 
+				...state, 
+				ingredients: action.payload.ingredients,
+				totalPrice: action.payload.totalPrice
+			 };
 		case "TOGGLE_PURCHASE":
 			return {
 				...state,

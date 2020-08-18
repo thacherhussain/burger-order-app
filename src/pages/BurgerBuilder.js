@@ -10,7 +10,7 @@ import { useOrderStore, useOrderDispatch } from 'context/orderContext';
 
 
 const BurgerBuilder = (props) => {
-	const { ingredients, error, basePrice, prices } = useOrderStore();
+	const { ingredients, error, basePrice, prices, totalPrice } = useOrderStore();
 	const dispatch = useOrderDispatch();
 
 	const history = useHistory(); // TODO: use this
@@ -69,7 +69,21 @@ const BurgerBuilder = (props) => {
 			...ingredients,
 		};
 		updatedIngredients[type] = updatedCount;
-		dispatch({ type: "MODIFY_INGREDIENTS", payload: updatedIngredients });
+		
+		const updatedTotalPrice = basePrice +
+		Object.entries(updatedIngredients)
+		.map(([key, value]) => {
+			return prices[key] * +value;
+		})
+		.reduce((sum, el) => sum + el, 0);
+
+		dispatch({ 
+			type: "MODIFY_INGREDIENTS",
+			payload: { 
+				ingredients: updatedIngredients,
+				totalPrice: updatedTotalPrice,
+			}
+		});
 	};
 
 	const removeIngredientHandler = (type) => {
@@ -82,7 +96,21 @@ const BurgerBuilder = (props) => {
 			...ingredients,
 		};
 		updatedIngredients[type] = updatedCount;
-		dispatch({ type: "MODIFY_INGREDIENTS", payload: updatedIngredients });
+
+		const updatedTotalPrice = basePrice +
+		Object.entries(updatedIngredients)
+		.map(([key, value]) => {
+			return prices[key] * +value;
+		})
+		.reduce((sum, el) => sum + el, 0);
+
+		dispatch({ 
+			type: "MODIFY_INGREDIENTS",
+			payload: { 
+				ingredients: updatedIngredients,
+				totalPrice: updatedTotalPrice,
+			}
+		});
 	};
 
 	const purchaseHandler = () => {
@@ -121,13 +149,13 @@ const BurgerBuilder = (props) => {
 		0
 	);
 
-	const totalPrice =
-		basePrice +
-		Object.entries(ingredients)
-			.map(([key, value]) => {
-				return prices[key] * +value;
-			})
-			.reduce((sum, el) => sum + el, 0);
+	// const totalPrice =
+	// 	basePrice +
+	// 	Object.entries(ingredients)
+	// 		.map(([key, value]) => {
+	// 			return prices[key] * +value;
+	// 		})
+	// 		.reduce((sum, el) => sum + el, 0);
 
 	return (
 		<>
@@ -165,8 +193,9 @@ const BurgerBuilder = (props) => {
 
 				{/* TODO: populate order data to checkout page -- use Context*/}
 				{/* TODO: get form submission with order information to push to firebase */}
-				{/* TODO: Setup SCHEDULE MY ORDER modal (Mockup of Tidepool component) */}
 				{/* TODO: add uuid library for order number and customer number (for when auth is added) */}
+					{/* yarn add uuid -- then see ContactData.js for how it is used */}
+				{/* TODO: Setup SCHEDULE MY ORDER modal (Mockup of Tidepool component) */}
 				{/* TODO: Setup more testing */}
 				{/* TODO: Setup Auth -- customer user sign up/sign in */}
 				{/* TODO: How to use images for individual burger pieces so that different ingredients can be more easily added/removed */}
