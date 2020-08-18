@@ -149,14 +149,6 @@ const BurgerBuilder = (props) => {
 		0
 	);
 
-	// const totalPrice =
-	// 	basePrice +
-	// 	Object.entries(ingredients)
-	// 		.map(([key, value]) => {
-	// 			return prices[key] * +value;
-	// 		})
-	// 		.reduce((sum, el) => sum + el, 0);
-
 	return (
 		<>
 			<Helmet>
@@ -190,15 +182,6 @@ const BurgerBuilder = (props) => {
 						/>
 					)}
 				</Row>
-
-				{/* TODO: populate order data to checkout page -- use Context*/}
-				{/* TODO: get form submission with order information to push to firebase */}
-				{/* TODO: add uuid library for order number and customer number (for when auth is added) */}
-					{/* yarn add uuid -- then see ContactData.js for how it is used */}
-				{/* TODO: Setup SCHEDULE MY ORDER modal (Mockup of Tidepool component) */}
-				{/* TODO: Setup more testing */}
-				{/* TODO: Setup Auth -- customer user sign up/sign in */}
-				{/* TODO: How to use images for individual burger pieces so that different ingredients can be more easily added/removed */}
 			</Container>
 		</>
 	);

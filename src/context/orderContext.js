@@ -7,7 +7,7 @@ const initialState = {
 	error: false,
 	basePrice: 0,
     prices: {},
-    totalPrice: 0,
+	totalPrice: 0,
 };
 
 const reducer = (state, action) => {
