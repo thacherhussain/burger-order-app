@@ -7,9 +7,11 @@ import axios from "../axios-orders";
 import Burger from "components/Burger/Burger";
 import ControlPanel from "components/Burger/ControlPanel";
 import { useOrderStore, useOrderDispatch } from "context/orderContext";
+// import { useOrderStore } from "context/orderContext";
 
 const BurgerBuilder = () => {
-	const { ingredients, error, basePrice, prices, totalPrice } = useOrderStore();
+	const { ingredients, error } = useOrderStore();
+	// const { ingredients, error, dispatch } = useOrderStore();
 	const dispatch = useOrderDispatch();
 	// const history = useHistory(); // TODO: use this
 	const [show, setShow] = useState(false);
@@ -17,21 +19,18 @@ const BurgerBuilder = () => {
 	useEffect(() => {
 		const getData = async () => {
 			try {
-				const [priceResponse, ingredientsResponse] = await Promise.all([
-					axios.get(
-						"https://burger-generator-cdbeb.firebaseio.com/%22basePrice%22.json"
-					),
+				const [response] = await Promise.all([
 					axios.get(
 						"https://burger-generator-cdbeb.firebaseio.com/%22bigIngredients%22.json"
 					),
 				]);
 
-				const prices = ingredientsResponse.data.reduce((acc, ingredient) => {
+				const prices = response.data.reduce((acc, ingredient) => {
 					acc[ingredient.name] = ingredient.cost;
 					return acc;
 				}, {});
 
-				const ingredients = ingredientsResponse.data.reduce(
+				const ingredients = response.data.reduce(
 					(acc, ingredient) => {
 						acc[ingredient.name] = ingredient.defaultValue;
 						return acc;
@@ -42,7 +41,6 @@ const BurgerBuilder = () => {
 				dispatch({
 					type: "INIT",
 					payload: {
-						basePrice: priceResponse.data,
 						ingredients: ingredients,
 						prices: prices,
 					},
@@ -53,6 +51,7 @@ const BurgerBuilder = () => {
 		};
 
 		getData();
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	const addIngredientHandler = (type) => {
@@ -63,19 +62,10 @@ const BurgerBuilder = () => {
 		};
 		updatedIngredients[type] = updatedCount;
 
-		const updatedTotalPrice =
-			basePrice +
-			Object.entries(updatedIngredients)
-				.map(([key, value]) => {
-					return prices[key] * +value;
-				})
-				.reduce((sum, el) => sum + el, 0);
-
 		dispatch({
 			type: "MODIFY_INGREDIENTS",
 			payload: {
 				ingredients: updatedIngredients,
-				totalPrice: updatedTotalPrice,
 			},
 		});
 	};
@@ -91,19 +81,10 @@ const BurgerBuilder = () => {
 		};
 		updatedIngredients[type] = updatedCount;
 
-		const updatedTotalPrice =
-			basePrice +
-			Object.entries(updatedIngredients)
-				.map(([key, value]) => {
-					return prices[key] * +value;
-				})
-				.reduce((sum, el) => sum + el, 0);
-
 		dispatch({
 			type: "MODIFY_INGREDIENTS",
 			payload: {
 				ingredients: updatedIngredients,
-				totalPrice: updatedTotalPrice,
 			},
 		});
 	};
@@ -148,7 +129,6 @@ const BurgerBuilder = () => {
 							disabled={purchasable}
 							purchasable={purchasable}
 							ordered={purchaseHandler}
-							price={totalPrice}
 							show={show}
 							onClose={purchaseCancelHandler}
 						/>

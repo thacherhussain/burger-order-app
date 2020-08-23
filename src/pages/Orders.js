@@ -29,7 +29,7 @@ const Orders = () => {
 						<h1>Orders</h1>
 						{orders.map((order) => (
 							<Order
-								key={order.customer.email}
+								key={order.orderId}
 								name={order.customer.name}
 								email={order.customer.email}
 								ingredients={order.ingredients}

@@ -1,4 +1,5 @@
 import React from "react";
+import { getTotalPrice  } from 'selectors';
 
 export default function makeStore(reducer, initialState) {
 	const storeContext = React.createContext();
@@ -12,14 +13,28 @@ export default function makeStore(reducer, initialState) {
 				<storeContext.Provider value={store}>{children}</storeContext.Provider>
 			</dispatchContext.Provider>
 		);
+
+		return (
+			<storeContext.Provider value={{ dispatch, store }}>
+				{children}
+			</storeContext.Provider>
+		)
 	};
 
 	function useStore() {
-		return React.useContext(storeContext);
+		const ctx = React.useContext(storeContext);
+		const calcTotalPrice = getTotalPrice(ctx.ingredients, ctx.prices);
+		return {...ctx, calcTotalPrice}
+
+		const { store } = React.useContext(storeContext);
+		return store;
 	}
 
 	function useDispatch() {
 		return React.useContext(dispatchContext);
+
+		const { dispatch } = React.useContext(storeContext);
+		return dispatch;
 	}
 
 	return [StoreProvider, useStore, useDispatch];
