@@ -3,12 +3,13 @@ import { Container, Row, Col, Modal, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 import IngredientButton from "components/Burger/IngredientButton";
+import TotalPrice from 'components/UI/TotalPrice';
 
 const ControlPanel = (props) => {
 	return (
 		<Container>
 			<Row className="justify-content-center py-3">
-				Current Price: $ {props.price.toFixed(2)}
+				<TotalPrice />
 			</Row>
 			<Row>
 				<Col>
@@ -30,11 +31,16 @@ const ControlPanel = (props) => {
 						<Modal.Title>Order Details</Modal.Title>
 					</Modal.Header>
 					<Modal.Body>
-						<ul>
-							{Object.entries(props.ingredients).map(([key, value]) => (
-								<li>{key} - {value}</li>
-							))}
-						</ul>
+						<Row>
+							<ul>
+								{Object.entries(props.ingredients).map(([key, value]) => (
+									<li key={key}>{key} - {value}</li>
+								))}
+							</ul>
+						</Row>
+						<Row className="justify-content-center">
+							<TotalPrice />
+						</Row>
 					</Modal.Body>
 					<Modal.Footer className="justify-content-center">
 						<Button variant="secondary" onClick={props.onClose}>

@@ -12,7 +12,7 @@ import { useOrderStore } from "context/orderContext";
 /* TODO: Setup SCHEDULE MY ORDER modal (Mockup of Tidepool component) */
 
 const Checkout = () => {
-	const { ingredients, totalPrice } = useOrderStore();
+	const { ingredients, calcTotalPrice: totalPrice } = useOrderStore();
 
 	const history = useHistory();
 	const orderId = uuidv4();
@@ -32,7 +32,6 @@ const Checkout = () => {
 			},
 			deliveryMethod: values.deliveryMethod,
 		};
-		console.log("order: " + order.customer.name);
 		axios
 			.post("/orders.json", order)
 			.then((response) => {
@@ -56,7 +55,7 @@ const Checkout = () => {
 						<p>Order Summary</p>
 						<ul>
 							{Object.entries(ingredients).map(([key, value]) => (
-								<li>
+								<li key={key}>
 									{key} - {value}
 								</li>
 							))}
