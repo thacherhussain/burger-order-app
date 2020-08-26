@@ -10,29 +10,33 @@ import Checkout from "./pages/Checkout";
 
 import { OrderProvider } from "context/orderContext";
 
-const App = () => {
+const App = () => (
+<OrderProvider>
+	<Router />
+</OrderProvider>
+)
+
+const Router = React.memo(() => {
 	return (
 		<BrowserRouter>
 			<Layout>
-				<OrderProvider>
-					<Switch>
-						<Route path="/" exact>
-							<Home />
-						</Route>
-						<Route path="/burger-builder" exact>
-							<BurgerBuilder />
-						</Route>
-						<Route path="/orders" exact>
-							<Orders />
-						</Route>
-						<Route path="/checkout" exact>
-							<Checkout />
-						</Route>
-					</Switch>
-				</OrderProvider>
+				<Switch>
+					<Route path="/" exact>
+						<Home />
+					</Route>
+					<Route path="/burger-builder" exact>
+						<BurgerBuilder />
+					</Route>
+					<Route path="/orders" exact>
+						<Orders />
+					</Route>
+					<Route path="/checkout" exact>
+						<Checkout />
+					</Route>
+				</Switch>
 			</Layout>
 		</BrowserRouter>
 	);
-};
+});
 
 export default App;

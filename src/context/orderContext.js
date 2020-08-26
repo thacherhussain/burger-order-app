@@ -5,9 +5,7 @@ const initialState = {
 	purchasing: false,
 	loading: false,
 	error: false,
-	basePrice: 0,
     prices: {},
-	totalPrice: 0,
 };
 
 const reducer = (state, action) => {
@@ -17,7 +15,6 @@ const reducer = (state, action) => {
 			return { 
 				...state, 
 				ingredients: action.payload.ingredients,
-				totalPrice: action.payload.totalPrice
 			 };
 		case "TOGGLE_PURCHASE":
 			return {
@@ -28,7 +25,6 @@ const reducer = (state, action) => {
 		case "INIT":
 			return {
 				...state,
-				basePrice: action.payload.basePrice,
 				ingredients: action.payload.ingredients,
 				prices: action.payload.prices,
 			};

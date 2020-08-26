@@ -24,7 +24,7 @@ const Layout = (props) => {
 	return (
 		<>
 			<Navbar expanded={expanded} bg="light" expand="sm">
-				<Navbar.Brand href="/">
+				<Navbar.Brand href="/burger-builder">
 					<img
 						alt=""
 						src={require("../assets/images/burger-logo.png")}
