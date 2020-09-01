@@ -6,8 +6,9 @@ import { useForm } from "react-hook-form";
 import { get } from "lodash";
 import { v4 as uuidv4 } from "uuid";
 
-import axios from "axios-orders";
 import { useOrderStore } from "context/orderContext";
+import axios from "axios-orders";
+import TotalPrice from 'components/UI/TotalPrice';
 
 /* TODO: Setup SCHEDULE MY ORDER modal (Mockup of Tidepool component) */
 
@@ -60,7 +61,7 @@ const Checkout = () => {
 								</li>
 							))}
 						</ul>
-						<p>Total Price ${Number.parseFloat(totalPrice).toFixed(2)}</p>
+						<TotalPrice />
 					</Col>
 				</Row>
 				<Row>
