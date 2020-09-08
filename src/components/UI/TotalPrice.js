@@ -4,7 +4,7 @@ import { useOrderStore } from "context/orderContext";
 
 const TotalPrice = () => {
     const { calcTotalPrice: totalPrice } = useOrderStore();
-    return <span>Total Price: ${totalPrice.toFixed(2)}</span>
+    return <strong>Total Price: ${totalPrice.toFixed(2)}</strong>
 };
 
 export default TotalPrice;

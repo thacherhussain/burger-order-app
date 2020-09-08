@@ -1,6 +1,6 @@
 import React from "react";
-import { Container, Row, Col, Form, Button } from "react-bootstrap";
-import { useHistory } from "react-router-dom";
+import { Container, Row, Col, Form, Button, Image } from "react-bootstrap";
+import { useHistory, Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { useForm } from "react-hook-form";
 import { get } from "lodash";
@@ -49,12 +49,18 @@ const Checkout = () => {
 				<title>Checkout | Good Burger</title>
 			</Helmet>
 			<Container fluid>
-				<Row></Row>
 				<Row>
-					<Col md={10} sm={10} className="justify-content-center">
+					<Col className="justify-content-center">
 						<h1>Checkout</h1>
+					</Col>
+				</Row>
+				<Row>
+					<Col>
+						<Image fluid src={require("../assets/images/burger.jpg")} style={{ width: 250 }} />
+					</Col>
+					<Col>
 						<p>Order Summary</p>
-						<ul>
+						<ul style={{ listStyleType: 'none', padding: 0 }}>
 							{Object.entries(ingredients).map(([key, value]) => (
 								<li key={key}>
 									{key} - {value}
@@ -64,8 +70,8 @@ const Checkout = () => {
 						<TotalPrice />
 					</Col>
 				</Row>
-				<Row>
-					<Col lg={{ offset: 2 }}>
+				<Row className="my-5">
+					<Col>
 						<h3>Enter Your Information</h3>
 						<Form onSubmit={handleSubmit(orderHandler)}>
 							<Form.Group controlId="formBasicName">
@@ -122,6 +128,9 @@ const Checkout = () => {
 								</Form.Control>
 							</Form.Group>
 							<Row className="justify-content-center">
+								<Button size="lg" variant="secondary" className="mx-2" as={Link} to="/burger-builder">
+									Cancel
+								</Button>
 								<Button size="lg" type="submit">
 									Confirm
 								</Button>
