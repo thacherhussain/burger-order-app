@@ -1,19 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { Helmet } from "react-helmet";
-// import { useHistory } from "react-router-dom";
 
 import axios from "../axios-orders";
 import Burger from "components/Burger/Burger";
 import ControlPanel from "components/Burger/ControlPanel";
 import { useOrderStore, useOrderDispatch } from "context/orderContext";
-// import { useOrderStore } from "context/orderContext";
 
 const BurgerBuilder = () => {
 	const { ingredients, error } = useOrderStore();
-	// const { ingredients, error, dispatch } = useOrderStore();
 	const dispatch = useOrderDispatch();
-	// const history = useHistory(); // TODO: use this
 	const [show, setShow] = useState(false);
 
 	useEffect(() => {
