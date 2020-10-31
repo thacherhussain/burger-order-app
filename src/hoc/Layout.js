@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Container, Navbar, Nav, Form, Button } from "react-bootstrap";
+// import Banners from 'components/Banners';
 import SignInModal from 'components/UI/SignInModal';
 
 const NavLink = ({ to, children, onClick }) => (
@@ -13,9 +14,12 @@ const Layout = (props) => {
 	const [expanded, setExpanded] = useState(false);
 
 	const [show, setShow] = useState(false);
-
+	
 	const handleClose = () => setShow(false);
 	const handleShow = () => setShow(true);
+	
+	// const [showBanner, setShowBanner] = useState(true);
+	// const handleBannerClose = () => setShowBanner(false);
 
 	useEffect(() => {
 		setExpanded(false);
@@ -48,6 +52,7 @@ const Layout = (props) => {
 				</Navbar.Collapse>
 			</Navbar>
 			<SignInModal show={show} onClose={handleClose} />
+			{/* <Banners show={showBanner} onClose={handleBannerClose}/> */}
 			<Container>{props.children}</Container>
 		</>
 	);

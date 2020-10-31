@@ -57,7 +57,6 @@ const BurgerBuilder = () => {
 			...ingredients,
 		};
 		updatedIngredients[type] = updatedCount;
-
 		dispatch({
 			type: "MODIFY_INGREDIENTS",
 			payload: {
