@@ -5,14 +5,16 @@ import { Helmet } from "react-helmet";
 import { useForm } from "react-hook-form";
 import { get } from "lodash";
 import { v4 as uuidv4 } from "uuid";
+import { useAuthState } from 'react-firebase-hooks/auth'
+import { auth } from '../firebase'
 
 import { useOrderStore } from "context/orderContext";
 import axios from "axios-orders";
 import TotalPrice from 'components/UI/TotalPrice';
 
-/* TODO: Setup SCHEDULE MY ORDER modal (Mockup of Tidepool component) */
-
 const Checkout = () => {
+  const [user] = useAuthState(auth)
+	
 	const { ingredients, calcTotalPrice: totalPrice } = useOrderStore();
 
 	const history = useHistory();
@@ -70,6 +72,11 @@ const Checkout = () => {
 						<TotalPrice />
 					</Col>
 				</Row>
+				{/* <Row className="my-5">
+					<Col className="justify-content-center">
+					{ !user && <p>Have an account?</p> }
+					</Col>
+				</Row> */}
 				<Row className="my-5">
 					<Col>
 						<h3>Enter Your Information</h3>
@@ -128,7 +135,7 @@ const Checkout = () => {
 								</Form.Control>
 							</Form.Group>
 							<Row className="justify-content-center">
-								<Button size="lg" variant="secondary" className="mx-2" as={Link} to="/burger-builder">
+								<Button size="lg" variant="outline-primary" className="mx-2" as={Link} to="/burger-builder">
 									Cancel
 								</Button>
 								<Button size="lg" type="submit">

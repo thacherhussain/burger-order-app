@@ -48,7 +48,7 @@ const ControlPanel = (props) => {
 						</Row>
 					</Modal.Body>
 					<Modal.Footer className="justify-content-center">
-						<Button variant="secondary" onClick={props.onClose}>
+						<Button variant="outline-primary" onClick={props.onClose}>
 							Cancel
 						</Button>
 						<Button variant="primary" as={Link} to="/checkout">
