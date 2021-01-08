@@ -59,7 +59,7 @@ const ControlPanel = (props) => {
 			</Row>
 			<Row className="justify-content-center my-3">
 				<Button size="lg" disabled={!props.purchasable} onClick={props.ordered}>
-					Submit
+					Order
 				</Button>
 			</Row>
 		</Container>

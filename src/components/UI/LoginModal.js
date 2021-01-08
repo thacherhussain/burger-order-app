@@ -24,7 +24,7 @@ const LoginModal = (props) => {
 				<Modal.Body>
 					<Form onSubmit={login}>
 						<Form.Group controlId="email">
-							<Form.Label>Email address</Form.Label>
+							<Form.Label>Email Address</Form.Label>
 							<Form.Control type="email" placeholder="Enter email" />
 						</Form.Group>
 						<Form.Group controlId="password">
@@ -37,7 +37,7 @@ const LoginModal = (props) => {
 						<Button variant="primary" type="submit" onClick={props.onClose}>
 							Login
 						</Button>
-						{ error && <p>{error}</p> }
+						{error && <Form.Text style={{color: 'red'}}>{error}</Form.Text>}
 					</Form>
 				</Modal.Body>
       </Modal>

@@ -34,7 +34,7 @@ const SignUpModal = (props) => {
 						<Button variant="outline-primary" onClick={props.onClose} style={{ marginRight: 10}}>
 							Cancel
 						</Button>
-						<Button variant="primary" type="submit" onClick={props.onClose}>
+						<Button variant="primary" type="submit">
 							Sign Up
 						</Button>
 						{ error && <p>{error}</p> }

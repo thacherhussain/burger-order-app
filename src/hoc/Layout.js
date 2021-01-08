@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react"
-import { Link, useLocation } from "react-router-dom"
-import { Container, Navbar, Nav, Form, Button } from "react-bootstrap"
+import React, { useState, useEffect } from 'react'
+import { Link, useLocation } from 'react-router-dom'
+import { Container, Navbar, Nav, Form, Button } from 'react-bootstrap'
 import { auth } from '../firebase'
 import { useAuthState } from 'react-firebase-hooks/auth'
 
-import LoginModal from '../components/UI/LoginModal'
-import SignUpModal from "components/UI/SignUpModal"
+import LoginModal from 'components/UI/LoginModal'
+import SignUpModal from 'components/UI/SignUpModal'
 
 const NavLink = ({ to, children, onClick }) => (
 	<Nav.Link onClick={onClick} as={Link} to={to}>
@@ -32,32 +32,32 @@ const Layout = (props) => {
 
 	return (
 		<>
-			<Navbar expanded={expanded} bg="light" expand="sm">
-				<Navbar.Brand href="/">
+			<Navbar expanded={expanded} bg='light' expand='sm'>
+				<Navbar.Brand href='/'>
 					<img
-						alt=""
-						src={require("../assets/images/burger-logo.png")}
-						height="30"
-						className="d-inline-block align-top"
-					/>{" "}
+						alt=''
+						src={require('../assets/images/burger-logo.png')}
+						height='30'
+						className='d-inline-block align-top'
+					/>{' '}
 					Good Burger
 				</Navbar.Brand>
 				<Navbar.Toggle onClick={() => setExpanded(!expanded)} />
-				<Navbar.Collapse className="justify-content-between">
+				<Navbar.Collapse className='justify-content-between'>
 					<Nav>
-						<NavLink to="/">Home</NavLink>
-						<NavLink to="/burger-builder">Burger Builder</NavLink>
-						{ user && <NavLink to="/orders">Orders</NavLink> }
+						<NavLink to='/'>Home</NavLink>
+						<NavLink to='/burger-builder'>Burger Builder</NavLink>
+						{ user && <NavLink to='/orders'>Orders</NavLink> }
 					</Nav>
 					<Form inline>
 						{ user ? (
-							<NavLink to="/" onClick={() => auth.signOut()}>Logout</NavLink>
+							<NavLink to='/' onClick={() => auth.signOut()}>Logout</NavLink>
 						) : (
 							<>
-								<Button variant="primary" onClick={handleShowLogin} style={{ marginRight: 10}}>
+								<Button variant='primary' onClick={handleShowLogin} style={{ marginRight: 10}}>
 									Login
 								</Button>
-								<Button variant="outline-primary" onClick={handleShowSignUp}>
+								<Button variant='outline-primary' onClick={handleShowSignUp}>
 									Sign Up
 								</Button>
 							</>
@@ -68,7 +68,7 @@ const Layout = (props) => {
 
 			<SignUpModal show={showSignUp} onClose={handleCloseSignUp} />
 			<LoginModal show={showLogin} onClose={handleCloseLogin} />
-			
+
 			<Container>{props.children}</Container>
 		</>
 	)
