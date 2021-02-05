@@ -1,24 +1,22 @@
-import React from "react";
-import { Container, Row, Col, Form, Button, Image } from "react-bootstrap";
-import { useHistory, Link } from "react-router-dom";
-import { Helmet } from "react-helmet";
-import { useForm } from "react-hook-form";
-import { get } from "lodash";
-import { v4 as uuidv4 } from "uuid";
+import React from "react"
+import { Container, Row, Col, Form, Button, Image } from "react-bootstrap"
+import { useHistory, Link } from "react-router-dom"
+import { Helmet } from "react-helmet"
+import { useForm } from "react-hook-form"
+import { get } from "lodash"
+import { v4 as uuidv4 } from "uuid"
 
-import { useOrderStore } from "context/orderContext";
-import axios from "axios-orders";
-import TotalPrice from 'components/UI/TotalPrice';
-
-/* TODO: Setup SCHEDULE MY ORDER modal (Mockup of Tidepool component) */
+import { useOrderStore } from "context/orderContext"
+import axios from "axios-orders"
+import TotalPrice from "components/UI/TotalPrice"
 
 const Checkout = () => {
-	const { ingredients, calcTotalPrice: totalPrice } = useOrderStore();
+	const { ingredients, calcTotalPrice: totalPrice } = useOrderStore()
 
-	const history = useHistory();
-	const orderId = uuidv4();
-	const customerId = uuidv4();
-	const { register, handleSubmit, errors } = useForm();
+	const history = useHistory()
+	const orderId = uuidv4()
+	const customerId = uuidv4()
+	const { register, handleSubmit, errors } = useForm()
 
 	const orderHandler = (values) => {
 		const order = {
@@ -32,16 +30,16 @@ const Checkout = () => {
 				address: values.address,
 			},
 			deliveryMethod: values.deliveryMethod,
-		};
+		}
 		axios
 			.post("/orders.json", order)
 			.then((response) => {
-				history.push("/");
+				history.push("/")
 			})
 			.catch((error) => {
-				console.log(error);
-			});
-	};
+				console.log(error)
+			})
+	}
 
 	return (
 		<>
@@ -50,17 +48,21 @@ const Checkout = () => {
 			</Helmet>
 			<Container fluid>
 				<Row>
-					<Col className="justify-content-center">
+					<Col className='justify-content-center'>
 						<h1>Checkout</h1>
 					</Col>
 				</Row>
 				<Row>
 					<Col>
-						<Image fluid src={require("../assets/images/burger.jpg")} style={{ width: 250 }} />
+						<Image
+							fluid
+							src={require("../assets/images/burger.jpg")}
+							style={{ width: 250 }}
+						/>
 					</Col>
 					<Col>
 						<p>Order Summary</p>
-						<ul style={{ listStyleType: 'none', padding: 0 }}>
+						<ul style={{ listStyleType: "none", padding: 0 }}>
 							{Object.entries(ingredients).map(([key, value]) => (
 								<li key={key}>
 									{key} - {value}
@@ -70,68 +72,85 @@ const Checkout = () => {
 						<TotalPrice />
 					</Col>
 				</Row>
-				<Row className="my-5">
+				<Row className='my-5'>
 					<Col>
 						<h3>Enter Your Information</h3>
 						<Form onSubmit={handleSubmit(orderHandler)}>
-							<Form.Group controlId="formBasicName">
+							<Form.Group controlId='formBasicName'>
 								<Form.Label>Name</Form.Label>
 								<Form.Control
-									type="text"
-									name="name"
+									type='text'
+									name='name'
 									ref={register({ required: true })}
-									placeholder="Hermione Granger"
-									/>
-									{errors.name && <Form.Text style={{color: 'red'}}>Name is required</Form.Text>}
+									placeholder='Hermione Granger'
+								/>
+								{errors.name && (
+									<Form.Text style={{ color: "red" }}>
+										Name is required
+									</Form.Text>
+								)}
 							</Form.Group>
-							<Form.Group controlId="formBasicEmail">
+							<Form.Group controlId='formBasicEmail'>
 								<Form.Label>Email address</Form.Label>
 								<Form.Control
-									type="email"
-									name="email"
+									type='email'
+									name='email'
 									ref={register({ required: true })}
-									placeholder="ceo@spew.org"
+									placeholder='ceo@spew.org'
 								/>
-								{errors.email && <Form.Text style={{color: 'red'}}>Email is required</Form.Text>}
+								{errors.email && (
+									<Form.Text style={{ color: "red" }}>
+										Email is required
+									</Form.Text>
+								)}
 							</Form.Group>
 							<Form.Group>
 								<Form.Label>Street Address</Form.Label>
 								<Form.Control
-									type="text"
-									name="address.street"
+									type='text'
+									name='address.street'
 									ref={register({ required: true })}
-									placeholder="3429 Ministry Street"
+									placeholder='3429 Ministry Street'
 								/>
 								{get(errors, "address.street") && (
-									<Form.Text style={{color: 'red'}}>Street Address is required</Form.Text>
+									<Form.Text style={{ color: "red" }}>
+										Street Address is required
+									</Form.Text>
 								)}
 							</Form.Group>
 							<Form.Group>
 								<Form.Label>Zipcode</Form.Label>
 								<Form.Control
-									type="text"
-									name="address.zipcode"
+									type='text'
+									name='address.zipcode'
 									ref={register({ required: true })}
-									placeholder="87217"
+									placeholder='87217'
 								/>
 								{get(errors, "address.zipcode") && (
-									<Form.Text style={{color: 'red'}}>Zipcode is required</Form.Text>
+									<Form.Text style={{ color: "red" }}>
+										Zipcode is required
+									</Form.Text>
 								)}
 							</Form.Group>
-							<Form.Group controlId="formDeliveryMethod">
+							<Form.Group controlId='formDeliveryMethod'>
 								<Form.Label>Delivery Method</Form.Label>
-								<Form.Control as="select" name="deliveryMethod" ref={register}>
+								<Form.Control as='select' name='deliveryMethod' ref={register}>
 									<option>Standard</option>
 									<option>FedEx</option>
 									<option>Owl</option>
 									<option>Slow</option>
 								</Form.Control>
 							</Form.Group>
-							<Row className="justify-content-center">
-								<Button size="lg" variant="secondary" className="mx-2" as={Link} to="/burger-builder">
+							<Row className='justify-content-center'>
+								<Button
+									size='lg'
+									variant='secondary'
+									className='mx-2'
+									as={Link}
+									to='/burger-builder'>
 									Cancel
 								</Button>
-								<Button size="lg" type="submit">
+								<Button size='lg' type='submit'>
 									Confirm
 								</Button>
 							</Row>
@@ -140,7 +159,7 @@ const Checkout = () => {
 				</Row>
 			</Container>
 		</>
-	);
-};
+	)
+}
 
-export default Checkout;
+export default Checkout
