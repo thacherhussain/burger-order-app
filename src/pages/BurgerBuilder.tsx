@@ -5,29 +5,36 @@ import { Helmet } from "react-helmet"
 import axios from "../axios-orders"
 import Burger from "components/Burger/Burger"
 import ControlPanel from "components/Burger/ControlPanel"
-import { useOrderStore, useOrderDispatch } from "context/orderContext"
+import { useOrders } from "context/orderContext"
+import { IngredientKeys } from "common/types"
 
-const BurgerBuilder = () => {
-	const { ingredients, error } = useOrderStore()
-	const dispatch = useOrderDispatch()
+type BigIngredient = {
+	cost: number
+	defaultValue: number
+	name: string
+}
+
+const BurgerBuilder: React.FC = () => {
+	const { dispatch, store } = useOrders()
+	const { ingredients, error } = store
 	const [show, setShow] = useState(false)
 
 	useEffect(() => {
 		const getData = async () => {
 			try {
 				const [response] = await Promise.all([
-					axios.get("%22bigIngredients%22.json"),
+					axios.get<BigIngredient[]>("%22bigIngredients%22.json"),
 				])
 
 				const prices = response.data.reduce((acc, ingredient) => {
 					acc[ingredient.name] = ingredient.cost
 					return acc
-				}, {})
+				}, {} as Record<string, number>)
 
 				const ingredients = response.data.reduce((acc, ingredient) => {
 					acc[ingredient.name] = ingredient.defaultValue
 					return acc
-				}, {})
+				}, {} as Record<string, number>)
 
 				dispatch({
 					type: "INIT",
@@ -37,7 +44,7 @@ const BurgerBuilder = () => {
 					},
 				})
 			} catch (error) {
-				dispatch({ type: "ERROR" })
+				dispatch({ type: "ERROR", payload: undefined })
 			}
 		}
 
@@ -45,7 +52,9 @@ const BurgerBuilder = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 
-	const addIngredientHandler = (type) => {
+	const addIngredientHandler = (type: IngredientKeys) => {
+		if (!ingredients) return
+
 		const oldCount = ingredients[type]
 		const updatedCount = oldCount + 1
 		const updatedIngredients = {
@@ -60,7 +69,9 @@ const BurgerBuilder = () => {
 		})
 	}
 
-	const removeIngredientHandler = (type) => {
+	const removeIngredientHandler = (type: IngredientKeys) => {
+		if (!ingredients) return
+
 		const oldCount = ingredients[type]
 		if (oldCount <= 0) {
 			return
@@ -89,7 +100,7 @@ const BurgerBuilder = () => {
 		dispatch({ type: "TOGGLE_PURCHASE", payload: false })
 	}
 
-	const purchasable = Object.values(ingredients).reduce(
+	const purchasable = Object.values(ingredients ?? {}).reduce(
 		(sum, el) => sum + el,
 		0
 	)

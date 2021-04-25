@@ -6,19 +6,31 @@ import { useForm } from "react-hook-form"
 import { get } from "lodash"
 import { v4 as uuidv4 } from "uuid"
 
-import { useOrderStore } from "context/orderContext"
+import { useOrders } from "context/orderContext"
 import axios from "axios-orders"
 import TotalPrice from "components/UI/TotalPrice"
+import { getTotalPrice } from "selectors"
+
+type FormValues = {
+	name: string
+	email: string
+	address: string
+	deliveryMethod: string
+}
 
 const Checkout = () => {
-	const { ingredients, calcTotalPrice: totalPrice } = useOrderStore()
+	const {
+		store: { ingredients, prices },
+	} = useOrders()
+	const totalPrice =
+		ingredients && prices ? getTotalPrice(ingredients, prices) : 0
 
 	const history = useHistory()
 	const orderId = uuidv4()
 	const customerId = uuidv4()
-	const { register, handleSubmit, errors } = useForm()
+	const { register, handleSubmit, errors } = useForm<FormValues>()
 
-	const orderHandler = (values) => {
+	const orderHandler = handleSubmit((values) => {
 		const order = {
 			orderId: orderId,
 			ingredients: ingredients,
@@ -39,7 +51,7 @@ const Checkout = () => {
 			.catch((error) => {
 				console.log(error)
 			})
-	}
+	})
 
 	return (
 		<>
@@ -63,7 +75,7 @@ const Checkout = () => {
 					<Col>
 						<p>Order Summary</p>
 						<ul style={{ listStyleType: "none", padding: 0 }}>
-							{Object.entries(ingredients).map(([key, value]) => (
+							{Object.entries(ingredients ?? {}).map(([key, value]) => (
 								<li key={key}>
 									{key} - {value}
 								</li>
@@ -75,7 +87,7 @@ const Checkout = () => {
 				<Row className='my-5'>
 					<Col>
 						<h3>Enter Your Information</h3>
-						<Form onSubmit={handleSubmit(orderHandler)}>
+						<Form onSubmit={orderHandler}>
 							<Form.Group controlId='formBasicName'>
 								<Form.Label>Name</Form.Label>
 								<Form.Control

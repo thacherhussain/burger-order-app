@@ -1,15 +1,20 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, FC } from "react"
 import { Link, useLocation } from "react-router-dom"
 import { Container, Navbar, Nav, Form, Button } from "react-bootstrap"
 // import Banners from 'components/Banners';
 import SignInModal from "components/UI/SignInModal"
 
-const NavLink = ({ to, children, onClick }) => (
+type NavLinkProps = {
+	to: string
+	onClick?: () => void
+}
+const NavLink: FC<NavLinkProps> = ({ to, children, onClick }) => (
 	<Nav.Link onClick={onClick} as={Link} to={to}>
 		{children}
 	</Nav.Link>
 )
-const Layout = (props) => {
+
+const Layout: FC = ({ children }) => {
 	const location = useLocation()
 	const [expanded, setExpanded] = useState(false)
 
@@ -53,7 +58,7 @@ const Layout = (props) => {
 			</Navbar>
 			<SignInModal show={show} onClose={handleClose} />
 			{/* <Banners show={showBanner} onClose={handleBannerClose}/> */}
-			<Container>{props.children}</Container>
+			<Container>{children}</Container>
 		</>
 	)
 }

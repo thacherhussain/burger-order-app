@@ -1,8 +1,13 @@
 import React from "react"
-import { useOrderStore } from "context/orderContext"
+import { useOrders } from "context/orderContext"
+import { getTotalPrice } from "selectors"
 
 const TotalPrice: React.FC = () => {
-	const { calcTotalPrice: totalPrice } = useOrderStore()
+	const {
+		store: { ingredients, prices },
+	} = useOrders()
+	const totalPrice = getTotalPrice(ingredients, prices)
+
 	return <strong>Total Price: ${totalPrice.toFixed(2)}</strong>
 }
 
