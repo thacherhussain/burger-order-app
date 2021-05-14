@@ -1,15 +1,15 @@
-import React from "react"
-import { Container, Row, Col, Form, Button, Image } from "react-bootstrap"
-import { useHistory, Link } from "react-router-dom"
-import { Helmet } from "react-helmet"
-import { useForm } from "react-hook-form"
-import { get } from "lodash"
-import { v4 as uuidv4 } from "uuid"
+import React from 'react'
+import { Container, Row, Col, Form, Button, Image } from 'react-bootstrap'
+import { useHistory, Link } from 'react-router-dom'
+import { Helmet } from 'react-helmet'
+import { useForm } from 'react-hook-form'
+import { get } from 'lodash'
+import { v4 as uuidv4 } from 'uuid'
 
-import { useOrders } from "context/orderContext"
-import axios from "axios-orders"
-import TotalPrice from "components/UI/TotalPrice"
-import { getTotalPrice } from "selectors"
+import { useOrders } from 'context/orderContext'
+import axios from 'axios-orders'
+import TotalPrice from 'components/UI/TotalPrice'
+import { getTotalPrice } from 'selectors'
 
 type FormValues = {
 	name: string
@@ -44,9 +44,9 @@ const Checkout = () => {
 			deliveryMethod: values.deliveryMethod,
 		}
 		axios
-			.post("/orders.json", order)
+			.post('/orders.json', order)
 			.then((response) => {
-				history.push("/")
+				history.push('/')
 			})
 			.catch((error) => {
 				console.log(error)
@@ -68,13 +68,13 @@ const Checkout = () => {
 					<Col>
 						<Image
 							fluid
-							src={require("../assets/images/burger.jpg")}
+							src={require('../assets/images/burger.jpg')}
 							style={{ width: 250 }}
 						/>
 					</Col>
 					<Col>
 						<p>Order Summary</p>
-						<ul style={{ listStyleType: "none", padding: 0 }}>
+						<ul style={{ listStyleType: 'none', padding: 0 }}>
 							{Object.entries(ingredients ?? {}).map(([key, value]) => (
 								<li key={key}>
 									{key} - {value}
@@ -97,7 +97,7 @@ const Checkout = () => {
 									placeholder='Hermione Granger'
 								/>
 								{errors.name && (
-									<Form.Text style={{ color: "red" }}>
+									<Form.Text style={{ color: 'red' }}>
 										Name is required
 									</Form.Text>
 								)}
@@ -111,7 +111,7 @@ const Checkout = () => {
 									placeholder='ceo@spew.org'
 								/>
 								{errors.email && (
-									<Form.Text style={{ color: "red" }}>
+									<Form.Text style={{ color: 'red' }}>
 										Email is required
 									</Form.Text>
 								)}
@@ -124,8 +124,8 @@ const Checkout = () => {
 									ref={register({ required: true })}
 									placeholder='3429 Ministry Street'
 								/>
-								{get(errors, "address.street") && (
-									<Form.Text style={{ color: "red" }}>
+								{get(errors, 'address.street') && (
+									<Form.Text style={{ color: 'red' }}>
 										Street Address is required
 									</Form.Text>
 								)}
@@ -138,8 +138,8 @@ const Checkout = () => {
 									ref={register({ required: true })}
 									placeholder='87217'
 								/>
-								{get(errors, "address.zipcode") && (
-									<Form.Text style={{ color: "red" }}>
+								{get(errors, 'address.zipcode') && (
+									<Form.Text style={{ color: 'red' }}>
 										Zipcode is required
 									</Form.Text>
 								)}

@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react"
-import { Container, Row, Col } from "react-bootstrap"
-import { Helmet } from "react-helmet"
+import React, { useState, useEffect } from 'react'
+import { Container, Row, Col } from 'react-bootstrap'
+import { Helmet } from 'react-helmet'
 
-import axios from "../axios-orders"
-import Burger from "components/Burger/Burger"
-import ControlPanel from "components/Burger/ControlPanel"
-import { useOrders } from "context/orderContext"
-import { IngredientKeys } from "common/types"
+import axios from '../axios-orders'
+import Burger from 'components/Burger/Burger'
+import ControlPanel from 'components/Burger/ControlPanel'
+import { useOrders } from 'context/orderContext'
+import { IngredientKeys } from 'common/types'
 
 type BigIngredient = {
 	cost: number
@@ -23,7 +23,7 @@ const BurgerBuilder: React.FC = () => {
 		const getData = async () => {
 			try {
 				const [response] = await Promise.all([
-					axios.get<BigIngredient[]>("%22bigIngredients%22.json"),
+					axios.get<BigIngredient[]>('%22bigIngredients%22.json'),
 				])
 
 				const prices = response.data.reduce((acc, ingredient) => {
@@ -37,14 +37,14 @@ const BurgerBuilder: React.FC = () => {
 				}, {} as Record<string, number>)
 
 				dispatch({
-					type: "INIT",
+					type: 'INIT',
 					payload: {
 						ingredients: ingredients,
 						prices: prices,
 					},
 				})
 			} catch (error) {
-				dispatch({ type: "ERROR", payload: undefined })
+				dispatch({ type: 'ERROR', payload: undefined })
 			}
 		}
 
@@ -62,7 +62,7 @@ const BurgerBuilder: React.FC = () => {
 		}
 		updatedIngredients[type] = updatedCount
 		dispatch({
-			type: "MODIFY_INGREDIENTS",
+			type: 'MODIFY_INGREDIENTS',
 			payload: {
 				ingredients: updatedIngredients,
 			},
@@ -83,7 +83,7 @@ const BurgerBuilder: React.FC = () => {
 		updatedIngredients[type] = updatedCount
 
 		dispatch({
-			type: "MODIFY_INGREDIENTS",
+			type: 'MODIFY_INGREDIENTS',
 			payload: {
 				ingredients: updatedIngredients,
 			},
@@ -92,18 +92,20 @@ const BurgerBuilder: React.FC = () => {
 
 	const purchaseHandler = () => {
 		setShow(true)
-		dispatch({ type: "TOGGLE_PURCHASE", payload: true })
+		dispatch({ type: 'TOGGLE_PURCHASE', payload: true })
 	}
 
 	const purchaseCancelHandler = () => {
 		setShow(false)
-		dispatch({ type: "TOGGLE_PURCHASE", payload: false })
+		dispatch({ type: 'TOGGLE_PURCHASE', payload: false })
 	}
 
 	const purchasable = Object.values(ingredients ?? {}).reduce(
 		(sum, el) => sum + el,
 		0
 	)
+
+	if (!ingredients) return null
 
 	return (
 		<>

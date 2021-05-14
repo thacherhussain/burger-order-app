@@ -1,6 +1,6 @@
-import React from "react"
-import { getTotalPrice } from "selectors"
-import { Ingredients } from "common/types"
+import React from 'react'
+import { getTotalPrice } from 'selectors'
+import { Ingredients } from 'common/types'
 
 type UninitalizedState = {
 	ingredients?: undefined
@@ -10,7 +10,7 @@ type UninitalizedState = {
 	prices?: undefined
 }
 
-type InitalizedState = Omit<UninitalizedState, "ingredients" | "prices"> & {
+type InitalizedState = Omit<UninitalizedState, 'ingredients' | 'prices'> & {
 	ingredients: Ingredients
 	prices: Ingredients
 }
@@ -53,27 +53,27 @@ const useOrders = () => {
 const reducer = (state: RootState, action: ReducerActions) => {
 	// TODO: LOOK INTO IMMER
 	switch (action.type) {
-		case "MODIFY_INGREDIENTS":
+		case 'MODIFY_INGREDIENTS':
 			return {
 				...state,
 				ingredients: action.payload.ingredients,
 			}
-		case "TOGGLE_PURCHASE":
+		case 'TOGGLE_PURCHASE':
 			return {
 				...state,
 				purchasing:
 					action.payload !== undefined ? action.payload : !state.purchasing,
 			}
-		case "INIT":
+		case 'INIT':
 			return {
 				...state,
 				ingredients: action.payload.ingredients,
 				prices: action.payload.prices,
 			}
-		case "ERROR":
+		case 'ERROR':
 			return { ...state, error: true }
 		default:
-			throw new Error("unhandled action type")
+			throw new Error('unhandled action type')
 	}
 }
 
@@ -83,8 +83,8 @@ type ActionType<T, P = undefined> = {
 }
 
 type ReducerActions =
-	| ActionType<"MODIFY_INGREDIENTS", { ingredients: any }>
-	| ActionType<"TOGGLE_PURCHASE", boolean | undefined>
-	| ActionType<"INIT", { ingredients: any; prices: any }>
-	| ActionType<"ERROR">
+	| ActionType<'MODIFY_INGREDIENTS', { ingredients: any }>
+	| ActionType<'TOGGLE_PURCHASE', boolean | undefined>
+	| ActionType<'INIT', { ingredients: any; prices: any }>
+	| ActionType<'ERROR'>
 export { OrderProvider, useOrders }
