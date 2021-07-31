@@ -15,12 +15,16 @@ A simple react app built to learn more about react and test features and librari
 - `yarn build`
 
 ## Packages/Libraries Used
+
 - [storybook](https://storybook.js.org/)
 - [react-bootstrap](https://react-bootstrap.github.io/)
 - [react-hook-form](https://react-hook-form.com)
 - [uuid](https://github.com/uuidjs/uuid)
 
 ### Planned Packages/Libraries to Use
+
 - [react-a11y](https://github.com/reactjs/react-a11y) / [react-axe](https://github.com/dequelabs/react-axe)
-  
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+### Update README for new git commit
