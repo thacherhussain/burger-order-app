@@ -26,5 +26,3 @@ A simple react app built to learn more about react and test features and librari
 - [react-a11y](https://github.com/reactjs/react-a11y) / [react-axe](https://github.com/dequelabs/react-axe)
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-### Update README for new git commit
